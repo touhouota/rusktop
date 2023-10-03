@@ -1,9 +1,15 @@
+import { invoke } from "@tauri-apps/api";
+
 type TaskStatus = {
     todo: 0;
     doing: 1;
     suspend: 2; // 一時停止
     cancel: 3; // 実施せずにやめる
     done: 4; // 完了
+}
+
+interface appendTask {
+    [key: string]: any
 }
 
 class TaskItem {
@@ -26,15 +32,24 @@ class TaskItem {
     }
 }
 
-let appendTask = (e: Event) => {
+async function appendTask(e: Event) {
     console.log("appendTask!");
     
     if (e === null) { return ""; }
 
     const formData = new FormData(e.target as HTMLFormElement);
-    for (const pair of formData.entries()) {
-        console.log(pair);
+    let task: appendTask = {
+        title: "",
+        description: "",
+        estimateSec: 0
+    };
+    for (const key of formData.keys()) {
+        task[key] = formData.get(key);
     }
+    console.log(task);
+    
+
+    await invoke<null>("append_task", {title: task.title, description: task.description, estimateSec: Number(task.estimateSec)});
 }
 
 export { appendTask };
