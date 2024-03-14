@@ -1,7 +1,7 @@
 <script lang="ts">
-  import Todo from "./lib/Todo.svelte";
-  import Doing from './lib/Doing.svelte';
-  import Done from './lib/Done.svelte';
+  import Todo from "./lib/component/Todo.svelte";
+  import Doing from './lib/component/Doing.svelte';
+  import Done from './lib/component/Done.svelte';
 </script>
 
 <main class="container">
