@@ -28,7 +28,7 @@ impl TaskItem {
 }
 
 #[tauri::command]
-fn append_task(title: &str, description: &str, estimate_sec: u64) -> Result<String, String> {
+fn append_task(title: &str, _description: &str, _estimate_sec: u64) -> Result<String, String> {
     dbg!(title);
     Ok(title.to_string())
 }
