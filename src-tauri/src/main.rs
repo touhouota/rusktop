@@ -3,12 +3,9 @@
 
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
 
-use serde::{Deserialize, Serialize};
+mod database;
 
-#[tauri::command]
-fn greet(name: &str) -> String {
-    format!("Hello, {}! You've been greeted from Rust!", name)
-}
+use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct TaskItem {
@@ -33,11 +30,18 @@ fn append_task(title: &str, _description: &str, _estimate_sec: u64) -> Result<St
     Ok(title.to_string())
 }
 
+#[tauri::command]
+async fn show_tasks() -> Result<(), String> {
+    let mut connect = database::open_db().unwrap();
+    database::get_all_tasks(&connect);
+    Ok(())
+}
+
 fn main() {
     tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![
-            greet,
             append_task,
+            show_tasks
             ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

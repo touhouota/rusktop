@@ -1,6 +1,6 @@
 <script>
     import TaskItem from "./TaskItem.svelte";
-    import { appendTask } from "../appendTask";
+    import { appendTask, getTask } from "../appendTask";
 </script>
 
 <div>
@@ -14,4 +14,5 @@
         </label>
         <button id="appendTask" type="submit">タスク追加</button>
     </form>
+    <button id="getTask" on:click={getTask}>タスク取得(テスト)</button>
 </div>

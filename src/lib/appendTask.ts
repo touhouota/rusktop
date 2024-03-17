@@ -52,4 +52,12 @@ async function appendTask(e: Event) {
     await invoke<null>("append_task", {title: task.title, description: task.description, estimateSec: Number(task.estimateSec)});
 }
 
-export { appendTask };
+async function getTask(e: Event) {
+    console.log("getTask");
+
+    if (e === null) return "";
+
+    await invoke<null>("show_tasks");
+}
+
+export { appendTask, getTask };
