@@ -1,38 +1,12 @@
 import { invoke } from "@tauri-apps/api";
+import type { Task } from "./types";
 
-type TaskStatus = {
-    todo: 0;
-    doing: 1;
-    suspend: 2; // 一時停止
-    cancel: 3; // 実施せずにやめる
-    done: 4; // 完了
-}
 
 interface appendTask {
     [key: string]: any
 }
 
-class TaskItem {
-    id: number;
-    title: string;
-    description: string;
-    estimateSec: number;
-    measurementSec: number;
-    status: TaskStatus;
-    subTasks: Array<TaskItem>;
-
-    constructor(id: number, title: string, description: string, estimate: number, measurement: number, status: TaskStatus, childTasks: Array<TaskItem>) {
-        this.id = id;
-        this.title = title;
-        this.description = description;
-        this.estimateSec = estimate;
-        this.measurementSec = measurement;
-        this.status = status;
-        this.subTasks = childTasks;
-    }
-}
-
-async function appendTask(e: Event) {
+let appendTask = async (e: Event) => {
     console.log("appendTask!");
     
     if (e === null) { return ""; }
@@ -40,7 +14,7 @@ async function appendTask(e: Event) {
     const formData = new FormData(e.target as HTMLFormElement);
     let task: appendTask = {
         title: "",
-        description: "",
+        explain: "",
         estimateSec: 0
     };
     for (const key of formData.keys()) {
@@ -48,16 +22,18 @@ async function appendTask(e: Event) {
     }
     console.log(task);
     
-
-    await invoke<null>("append_task", {title: task.title, description: task.description, estimateSec: Number(task.estimateSec)});
+    await invoke<null>("append_task", {title: task.title, explain: task.explain, estimateSec: Number(task.estimateSec)});
 }
 
-async function getTask(e: Event) {
+let getTask = async () => {
     console.log("getTask");
 
-    if (e === null) return "";
+    let tasks = await invoke<Task[]>("get_tasks");
+    console.log(tasks);
 
-    await invoke<null>("show_tasks");
+    return tasks;
+
+    // return await invoke<Task[]>("get_tasks")
 }
 
 export { appendTask, getTask };

@@ -1,13 +1,27 @@
-<script>
+<script lang="ts">
+    import { onMount } from "svelte";
+    import { TaskStatus, type TaskInstace } from "../types";
 
+    export let taskinfo: TaskInstace = {
+        id: 0,
+        name: "タスク初期値",
+        explain: null,
+        createdDate: 10,
+        updatedDate: 10,
+        estimateSec: 10,
+        measurementSec: 10,
+        status: TaskStatus.todo
+    }
 </script>
 
 <div class="taskItem">
-    <h3 class="title nameArea">Task Name</h3>
+    <h3 class="title nameArea">タスク名: {taskinfo.name}</h3>
+    {#if taskinfo.explain !== null && taskinfo.explain.length !== 0 }
     <details class="description descriptionArea" open>
         <summary>タスク内容</summary>
-        タスクの詳細はあれこれを作るよ。
+        {taskinfo.explain}
     </details>
+    {/if}
     <canvas class="graph graphArea"></canvas>
     <div class="timeArea">
         <p class="timeItem estimate">
